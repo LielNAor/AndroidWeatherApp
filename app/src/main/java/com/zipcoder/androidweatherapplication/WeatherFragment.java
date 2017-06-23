@@ -5,11 +5,11 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +32,7 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
     TextView currentTempField;
     TextView weatherIcon;
     Typeface weatherFont;
+    SearchView searchView;
 
     ListView listView;
     ArrayList<WeatherModel> weatherModels;
@@ -71,6 +72,26 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
         weatherIcon = (TextView) rootView.findViewById(R.id.weather_icon);
         weatherIcon.setTypeface(weatherFont);
         listView = (ListView) rootView.findViewById(R.id.list);
+
+
+        // Search View
+        searchView=(SearchView) rootView.findViewById(R.id.searchView);
+        searchView.setQueryHint("Search View");
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                changeCity(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
 
         listView.setAdapter(adapter);
         return rootView;
@@ -166,6 +187,10 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
             }
         }
         weatherIcon.setText(icon);
+    }
+
+    public void changeCity(String city){
+        updateWeatherData(city);
     }
 
     @Override

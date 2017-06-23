@@ -8,6 +8,13 @@
         android:id="@+id/relativeLayout"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true">
+        <SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:elevation="2dp"
+            android:background="#fff"
+            android:layout_height="wrap_content">
+        </SearchView>
 
         <TextView
             android:id="@+id/city_field"
