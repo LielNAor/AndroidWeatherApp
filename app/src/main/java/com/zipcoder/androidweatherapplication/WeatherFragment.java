@@ -9,11 +9,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -29,6 +32,10 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
     TextView currentTempField;
     TextView weatherIcon;
     Typeface weatherFont;
+
+    ListView listView;
+    ArrayList<WeatherModel> weatherModels;
+    private static CustomListAdapter adapter;
 
     String selectedCity = "philalphia";
     Handler handler;
@@ -51,6 +58,10 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        weatherModels = new ArrayList<>();
+        adapter = new CustomListAdapter(weatherModels, getActivity());
+
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_weather, container, false);
         cityField = (TextView) rootView.findViewById(R.id.city_field);
@@ -59,6 +70,9 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
         currentTempField = (TextView) rootView.findViewById(R.id.current_temp_field);
         weatherIcon = (TextView) rootView.findViewById(R.id.weather_icon);
         weatherIcon.setTypeface(weatherFont);
+        listView = (ListView) rootView.findViewById(R.id.list);
+
+        listView.setAdapter(adapter);
         return rootView;
     }
 
@@ -75,7 +89,7 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
                             toast.show();
                         }else {
                             renderCurrentWeather(current);
-                            Log.i("Five Day", String.valueOf(fiveDay));
+                            renderFiveDayWeather(fiveDay);
                         }
                     }
                 });
@@ -97,6 +111,26 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
                 "\n" + "Humidity: " + weatherModelCurrent.getHumidity() +
                 "\n" + "Pressure:" + weatherModelCurrent.getPressure());
         setWeatherIcon(weatherModelCurrent.getWeatherIconId(), weatherModelCurrent.getSunrise(), weatherModelCurrent.getSunset());
+
+    }
+
+
+    private void renderFiveDayWeather(JSONObject json){
+        adapter.clear();
+        WeatherModel weatherModel;
+        try {
+
+            int length  = json.getJSONArray("list").length();
+
+            for (int i = 0; i < length; i++) {
+                weatherModel = JSONToModel.forecastToModel(json.getJSONArray("list").getJSONObject(i));
+                adapter.add(weatherModel);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
 
     }
 
