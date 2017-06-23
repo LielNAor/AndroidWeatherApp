@@ -16,7 +16,8 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:paddingTop="50sp"/>
+            android:paddingTop="50sp"
+            android:text="HELLO!"/>
 
         <TextView
             android:id="@+id/update_field"
