@@ -17,10 +17,40 @@ public class RemoteFetch {
 
 
     private static final String CURRENT = Helper.CURRENT_WEATHER_ADI_URL + Helper.setUnits("imperial") + Helper.API_ID;
+    private static final String FIVE_DAY = Helper.FIVE_DAY_WEATHER_API_URL;
+
 
     public static JSONObject getCurrentWeatherJSON(String city){
         try{
             URL url = new URL(String.format(CURRENT, city));
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream()));
+
+            StringBuffer json = new StringBuffer(1024);
+            String tmp = "";
+            while (((tmp=reader.readLine())!=null))
+                json.append(tmp).append("\n");
+            reader.close();
+
+            JSONObject data = new JSONObject(json.toString());
+
+            // check weather request is successfull or not
+            if (data.getInt("cod") != 200){
+                return null;
+            }
+
+            return data;
+
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static JSONObject getFiveDayWeatherJSON(String city){
+        try{
+            URL url = new URL(FIVE_DAY+city+Helper.setUnits("imperial") + Helper.API_ID);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
             BufferedReader reader = new BufferedReader(

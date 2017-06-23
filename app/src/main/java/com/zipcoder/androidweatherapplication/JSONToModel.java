@@ -45,4 +45,26 @@ public class JSONToModel {
         return weatherModel;
     }
 
+    public static WeatherModel forecastToModel(JSONObject jsonObject){
+        Log.i("sd",(String.valueOf(jsonObject)));
+
+
+        WeatherModel weatherModel = new WeatherModel();
+        try {
+            JSONObject details = jsonObject.getJSONArray("weather").getJSONObject(0);
+            JSONObject main = jsonObject.getJSONObject("main");
+
+            weatherModel.setDescription(details.getString("description"));
+            weatherModel.setTemp(main.getString("temp"));
+            weatherModel.setHumidity(main.getString("humidity"));
+            weatherModel.setTime(jsonObject.getString("dt_txt"));
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return weatherModel;
+    }
+
 }

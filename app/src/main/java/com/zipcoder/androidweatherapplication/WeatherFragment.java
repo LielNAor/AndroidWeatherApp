@@ -67,7 +67,7 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
         new Thread() {
             public void run() {
                 final JSONObject current = RemoteFetch.getCurrentWeatherJSON(city);
-
+                final JSONObject fiveDay = RemoteFetch.getFiveDayWeatherJSON(city);
                 handler.post(new Runnable() {
                     public void run() {
                         if (current == null){
@@ -75,6 +75,7 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
                             toast.show();
                         }else {
                             renderCurrentWeather(current);
+                            Log.i("Five Day", String.valueOf(fiveDay));
                         }
                     }
                 });
