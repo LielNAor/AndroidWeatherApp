@@ -18,6 +18,7 @@ import org.json.JSONObject;
  */
 public class WeatherFragment extends Fragment implements View.OnClickListener {
 
+
     String selectedCity = "philalphia";
     Handler handler;
 
@@ -56,6 +57,7 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
                             toast.show();
                         }else {
                             Log.i("Current Weather Data ", String.valueOf(current));
+                            Log.i("Weather Model", String.valueOf(JSONToModel.currentToModel(current)));
 
                         }
 
